@@ -138,7 +138,7 @@ app.set('view engine', 'ejs');
 
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.static(path.join(__dirname, '..', 'Public')));
+app.use(express.static(path.join(__dirname,'public')));
 
 
 // ================= ROUTES =================
@@ -155,7 +155,7 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.get('/', (req, res) => {
 
   res.sendFile(
-    path.join(__dirname, '..', 'Public', 'Auctionz.HTML')
+    path.join(__dirname,'public', 'index.html')
   );
 
 });
