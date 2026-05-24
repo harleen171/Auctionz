@@ -269,7 +269,7 @@ GET /dashboard
 
 // 3. MAIN PAGE
 GET /
-// Opens: Public/Auctionz.HTML
+// Opens: Public/index.html
 
 // ========== HTTP STATUS CODES ==========
 
