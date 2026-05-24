@@ -1,0 +1,445 @@
+/**
+ * ============================================
+ * API ENDPOINTS CHEAT SHEET
+ * ============================================
+ * 
+ * Copy-paste these commands to test the API
+ */
+
+// ========== AUTHENTICATION ==========
+
+// 1. SIGNUP - Create new account
+POST /api/auth/signup
+Content-Type: application/json
+
+{
+  "fullName": "John Doe",
+  "username": "john_doe",
+  "email": "john@example.com",
+  "password": "Password123"
+}
+
+// RESPONSE:
+// {
+//   "success": true,
+//   "message": "Signup successful",
+//   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+//   "user": { ... }
+// }
+
+// ---
+
+// 2. LOGIN - Authenticate user
+POST /api/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "Password123"
+}
+
+// RESPONSE:
+// {
+//   "success": true,
+//   "message": "Login successful",
+//   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+//   "user": { ... }
+// }
+
+// ---
+
+// 3. GET CURRENT USER (Protected)
+GET /api/auth/me
+Authorization: Bearer {jwt_token}
+
+// RESPONSE:
+// {
+//   "success": true,
+//   "user": { ... }
+// }
+
+// ---
+
+// 4. LOGOUT
+POST /api/auth/logout
+Authorization: Bearer {jwt_token}
+
+// RESPONSE:
+// {
+//   "success": true,
+//   "message": "Logged out successfully"
+// }
+
+// ========== AUCTIONS ==========
+
+// 1. GET ALL AUCTIONS
+GET /api/auctions
+// Query parameters (optional):
+// ?page=1
+// &limit=10
+// &category=Electronics
+// &status=active
+
+// RESPONSE:
+// {
+//   "success": true,
+//   "pagination": {
+//     "page": 1,
+//     "limit": 10,
+//     "total": 45,
+//     "pages": 5
+//   },
+//   "auctions": [ ... ]
+// }
+
+// ---
+
+// 2. GET SINGLE AUCTION
+GET /api/auctions/{auctionId}
+
+// RESPONSE:
+// {
+//   "success": true,
+//   "auction": { ... }
+// }
+
+// ---
+
+// 3. CREATE AUCTION (Protected)
+POST /api/auctions
+Authorization: Bearer {jwt_token}
+Content-Type: application/json
+
+{
+  "title": "Vintage Camera",
+  "description": "Rare 1990s camera in excellent condition. Well-maintained, original case included.",
+  "category": "Electronics",
+  "startingPrice": 50,
+  "startTime": "2024-01-16T10:00:00Z",
+  "endTime": "2024-01-23T10:00:00Z",
+  "condition": "like-new",
+  "location": "New York, NY",
+  "images": [
+    "https://example.com/image1.jpg",
+    "https://example.com/image2.jpg"
+  ]
+}
+
+// Required fields:
+// - title (string, 5-100 chars)
+// - description (string, 10-5000 chars)
+// - category (enum: Electronics, Collectibles, Art, Fashion, Books, Other)
+// - startingPrice (number, >= 0)
+// - startTime (ISO Date)
+// - endTime (ISO Date, must be after startTime)
+// - condition (enum: new, like-new, good, fair, poor)
+// - location (string)
+
+// RESPONSE:
+// {
+//   "success": true,
+//   "message": "Auction created successfully",
+//   "auction": { ... }
+// }
+
+// ---
+
+// 4. UPDATE AUCTION (Protected)
+PUT /api/auctions/{auctionId}
+Authorization: Bearer {jwt_token}
+Content-Type: application/json
+
+{
+  "title": "Updated Title",
+  "description": "Updated description"
+}
+
+// Note: Only seller can update
+// Note: Cannot update active auctions
+
+// RESPONSE:
+// {
+//   "success": true,
+//   "message": "Auction updated successfully",
+//   "auction": { ... }
+// }
+
+// ---
+
+// 5. DELETE AUCTION (Protected)
+DELETE /api/auctions/{auctionId}
+Authorization: Bearer {jwt_token}
+
+// Note: Only seller can delete
+
+// RESPONSE:
+// {
+//   "success": true,
+//   "message": "Auction deleted successfully"
+// }
+
+// ---
+
+// 6. GET USER'S AUCTIONS (Protected)
+GET /api/auctions/user/my-auctions
+Authorization: Bearer {jwt_token}
+// Query parameters (optional):
+// ?page=1&limit=10
+
+// RESPONSE:
+// {
+//   "success": true,
+//   "pagination": { ... },
+//   "auctions": [ ... ]
+// }
+
+// ========== TEST ROUTES ==========
+
+// 1. TEST PROTECTED ROUTE
+GET /api/protected
+Authorization: Bearer {jwt_token}
+
+// RESPONSE:
+// {
+//   "success": true,
+//   "message": "✅ You accessed a protected route!",
+//   "user": {
+//     "userId": "...",
+//     "email": "..."
+//   }
+// }
+
+// ---
+
+// 2. TEST PUBLIC ROUTE
+GET /api/public-test
+
+// RESPONSE:
+// {
+//   "success": true,
+//   "message": "✅ This is a public route - no authentication needed",
+//   "timestamp": "..."
+// }
+
+// ---
+
+// 3. DEMO: BLOCKING CODE
+GET /api/blocking-demo
+
+// WARNING: This blocks all other requests!
+// Watch other requests wait while this completes
+
+// RESPONSE:
+// {
+//   "message": "This was a blocking operation",
+//   "duration": "1234ms",
+//   "warning": "⚠️ All other requests waited for this to complete!"
+// }
+
+// ---
+
+// 4. DEMO: NON-BLOCKING CODE
+GET /api/non-blocking-demo
+
+// Other requests continue while this runs
+// Check server console after 2 seconds
+
+// RESPONSE:
+// {
+//   "message": "Check console after 2 seconds!",
+//   "info": "Other requests can be served meanwhile"
+// }
+
+// ========== PAGE ROUTES (SSR) ==========
+
+// 1. AUTH PAGE (Login/Signup)
+GET /auth/login
+// Opens: views/auth.ejs
+// Shows login and signup forms
+
+// ---
+
+// 2. DASHBOARD (Protected - Server-Side Rendering)
+GET /dashboard
+// Opens: views/dashboard.ejs
+// Shows user info and Socket.io chat
+// Server embeds data directly in HTML
+
+// ---
+
+// 3. MAIN PAGE
+GET /
+// Opens: Public/Auctionz.HTML
+
+// ========== HTTP STATUS CODES ==========
+
+// 200 - OK (Request successful)
+// 201 - Created (Resource created successfully)
+// 400 - Bad Request (Invalid input)
+// 401 - Unauthorized (JWT missing or invalid)
+// 403 - Forbidden (User not authorized for this action)
+// 404 - Not Found (Endpoint doesn't exist)
+// 409 - Conflict (Resource already exists)
+// 500 - Server Error
+
+// ========== TESTING WITH CURL ==========
+
+// Signup
+// curl -X POST http://localhost:3000/api/auth/signup \
+//   -H "Content-Type: application/json" \
+//   -d '{"fullName":"John","username":"john","email":"john@example.com","password":"Pass123"}'
+
+// Login
+// curl -X POST http://localhost:3000/api/auth/login \
+//   -H "Content-Type: application/json" \
+//   -d '{"email":"john@example.com","password":"Pass123"}'
+
+// Protected route (replace TOKEN with actual token)
+// curl -X GET http://localhost:3000/api/protected \
+//   -H "Authorization: Bearer TOKEN"
+
+// ========== TESTING WITH JAVASCRIPT ==========
+
+const API_URL = 'http://localhost:3000/api';
+let authToken = null;
+
+// Helper function
+async function apiCall(endpoint, method = 'GET', body = null) {
+  const options = {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  };
+
+  if (authToken) {
+    options.headers.Authorization = `Bearer ${authToken}`;
+  }
+
+  if (body) {
+    options.body = JSON.stringify(body);
+  }
+
+  const response = await fetch(API_URL + endpoint, options);
+  return response.json();
+}
+
+// Test signup
+async function testSignup() {
+  const result = await apiCall('/auth/signup', 'POST', {
+    fullName: 'Test User',
+    username: 'testuser',
+    email: 'test@example.com',
+    password: 'Password123'
+  });
+  
+  if (result.success) {
+    authToken = result.token;
+    console.log('✅ Signup successful');
+  } else {
+    console.log('❌ Signup failed:', result.message);
+  }
+}
+
+// Test login
+async function testLogin() {
+  const result = await apiCall('/auth/login', 'POST', {
+    email: 'test@example.com',
+    password: 'Password123'
+  });
+  
+  if (result.success) {
+    authToken = result.token;
+    console.log('✅ Login successful, token:', authToken.substring(0, 20) + '...');
+  } else {
+    console.log('❌ Login failed:', result.message);
+  }
+}
+
+// Test protected route
+async function testProtected() {
+  if (!authToken) {
+    console.log('❌ No token available. Login first!');
+    return;
+  }
+
+  const result = await apiCall('/protected');
+  console.log('✅ Protected route:', result);
+}
+
+// Test create auction
+async function testCreateAuction() {
+  if (!authToken) {
+    console.log('❌ No token available. Login first!');
+    return;
+  }
+
+  const result = await apiCall('/auctions', 'POST', {
+    title: 'Test Auction',
+    description: 'This is a test auction',
+    category: 'Electronics',
+    startingPrice: 100,
+    startTime: new Date().toISOString(),
+    endTime: new Date(Date.now() + 7*24*60*60*1000).toISOString(),
+    condition: 'like-new',
+    location: 'Test Location'
+  });
+
+  if (result.success) {
+    console.log('✅ Auction created:', result.auction._id);
+  } else {
+    console.log('❌ Failed:', result.message);
+  }
+}
+
+// Test get auctions
+async function testGetAuctions() {
+  const result = await apiCall('/auctions?page=1&limit=5');
+  console.log('✅ Auctions:', result.auctions.length, 'found');
+  console.log('📊 Total:', result.pagination.total);
+}
+
+// Run tests
+async function runTests() {
+  console.log('🧪 Starting API tests...\n');
+  
+  await testSignup();
+  await testProtected();
+  await testCreateAuction();
+  await testGetAuctions();
+  
+  console.log('\n✅ Tests complete!');
+}
+
+// In browser console, run: runTests()
+
+// ========== COMMON ERRORS & SOLUTIONS ==========
+
+/*
+Error: "Email already exists"
+Solution: Use a different email address
+
+Error: "Unauthorized - Please login first"
+Solution: Make sure Authorization header is set correctly
+         Format: "Bearer {token}" (note the space)
+
+Error: "Invalid or expired token"
+Solution: Your JWT token has expired, login again
+
+Error: "Password must be at least 6 characters"
+Solution: Password requirements:
+         - At least 6 characters
+         - At least one uppercase letter
+         - At least one number
+
+Error: "End time must be after start time"
+Solution: Make sure endTime is later than startTime
+         Example: now + 7 days
+
+Error: "Cannot update active auction"
+Solution: Only inactive auctions can be updated
+         Cancel the auction first
+
+Error: "Not authorized to update this auction"
+Solution: Only the seller (creator) can update/delete
+*/

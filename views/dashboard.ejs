@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AUCTIONZ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+        }
+
+        header {
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .welcome-message {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .user-info p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .info-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        button, a.btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .btn-danger {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ee5a6f;
+        }
+
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .note {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            border-radius: 5px;
+            margin-top: 15px;
+            color: #856404;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #999;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 15px;
+            padding: 10px;
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            border-radius: 5px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 AUCTIONZ Dashboard</h1>
+            <p class="welcome-message">Welcome to your personal auction dashboard</p>
+        </header>
+
+        <!-- SSR vs CSR Explanation -->
+        <section class="section">
+            <h2>📚 Server-Side Rendering (SSR) vs Client-Side Rendering (CSR)</h2>
+            <p>
+                <strong>This page is rendered using SSR:</strong>
+            </p>
+            <ul style="margin-left: 20px; margin-top: 10px;">
+                <li><strong>SSR (This Page):</strong>
+                    <ul>
+                        <li>✅ HTML is generated on the server</li>
+                        <li>✅ Data (user info) is embedded directly in HTML</li>
+                        <li>✅ Browser receives fully-rendered HTML</li>
+                        <li>✅ Faster initial page load (no JavaScript execution)</li>
+                        <li>✅ Better for SEO (search engines see complete content)</li>
+                        <li>✅ Better for users with slow devices</li>
+                        <li>⚠️ More server overhead, slower for complex interactions</li>
+                    </ul>
+                </li>
+                <li style="margin-top: 15px;"><strong>CSR (Traditional SPAs):</strong>
+                    <ul>
+                        <li>✅ Browser downloads blank HTML + JavaScript</li>
+                        <li>✅ JavaScript runs in browser and renders content</li>
+                        <li>✅ React, Vue, Angular work this way</li>
+                        <li>✅ Better for highly interactive experiences</li>
+                        <li>⚠️ Slower initial load, blank page flash</li>
+                        <li>⚠️ Requires JavaScript enabled</li>
+                        <li>⚠️ Harder for SEO</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="note">
+                💡 <strong>Pro Tip:</strong> Modern apps use <strong>Hybrid approach</strong> - SSR for initial load, then JavaScript takes over for interactivity (Next.js, Nuxt.js do this).
+            </div>
+        </section>
+
+        <!-- User Information (Server-Side Data) -->
+        <section class="section">
+            <h2>👤 Your Profile</h2>
+            <div class="user-info">
+                <p>
+                    <strong>Email:</strong> 
+                    <span class="info-badge"><%= user.email %></span>
+                </p>
+                <p>
+                    <strong>Username:</strong> 
+                    <span class="info-badge"><%= user.username %></span>
+                </p>
+                <p>
+                    <strong>Full Name:</strong> 
+                    <span class="info-badge"><%= user.fullName %></span>
+                </p>
+                <p>
+                    <strong>Member Since:</strong> 
+                    <span class="info-badge"><%= new Date(user.createdAt).toLocaleDateString() %></span>
+                </p>
+                <p>
+                    <strong>Account Status:</strong> 
+                    <span class="info-badge" style="background: #28a745;">Active</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- JWT Token Information -->
+        <section class="section">
+            <h2>🔐 Authentication Token</h2>
+            <p>Your JWT token is stored in localStorage (browser). Here's the structure:</p>
+            <code style="display: block; padding: 15px; margin-top: 10px; background: #1e1e1e; color: #00ff00; overflow-x: auto;">
+Header: { "alg": "HS256", "typ": "JWT" }
+Payload: { "userId": "<%= user._id %>", "email": "<%= user.email %>", "iat": ..., "exp": ... }
+Signature: HMACSHA256(Header + Payload, SECRET)
+            </code>
+
+            <div class="note">
+                🔒 <strong>Security Note:</strong> Never share your token! It's like a password that proves you're logged in.
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="section">
+            <h2>⚡ Quick Actions</h2>
+            <div class="btn-group">
+                <button class="btn-primary" onclick="fetchProtectedRoute()">Test Protected Route</button>
+                <button class="btn-primary" onclick="viewToken()">View Your Token</button>
+                <button class="btn-secondary" onclick="goToHome()">Back to Home</button>
+                <button class="btn-danger" onclick="logout()">Logout</button>
+            </div>
+        </section>
+
+        <!-- Socket.io Chat Section -->
+        <section class="section">
+            <h2>💬 Live Chat (Socket.io - Real-time)</h2>
+            <div id="messages" style="height: 300px; border: 1px solid #ddd; padding: 15px; overflow-y: auto; background: white; margin-bottom: 10px; border-radius: 5px;">
+                <p style="color: #999;">Waiting for messages...</p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <input 
+                    type="text" 
+                    id="messageInput" 
+                    placeholder="Type a message..." 
+                    style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;"
+                />
+                <button class="btn-primary" onclick="sendMessage()">Send</button>
+            </div>
+        </section>
+
+        <div class="loading" id="loading">
+            Loading...
+        </div>
+
+        <footer class="footer">
+            <p>🎯 AUCTIONZ © 2024 - Educational Project</p>
+        </footer>
+    </div>
+
+    <!-- Socket.io Script -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // ========== SOCKET.IO SETUP ==========
+        // Demonstrates: Real-time, full-duplex communication
+        // Client connects to server and listens for messages
+        
+        const socket = io();
+
+        // Listen for messages from server
+        socket.on('chatMessage', (data) => {
+            const messagesDiv = document.getElementById('messages');
+            const messageEl = document.createElement('div');
+            messageEl.style.cssText = 'margin-bottom: 10px; padding: 10px; background: #f0f0f0; border-radius: 5px;';
+            messageEl.innerHTML = `<strong>${data.username}:</strong> ${data.message} <small style="color: #999;">${data.timestamp}</small>`;
+            messagesDiv.appendChild(messageEl);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        });
+
+        // Listen for user count updates
+        socket.on('userCount', (count) => {
+            console.log(`👥 Users online: ${count}`);
+        });
+
+        // ========== HELPER FUNCTIONS ==========
+
+        // Send message via Socket.io
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+
+            if (message) {
+                socket.emit('sendMessage', {
+                    message: message,
+                });
+                input.value = '';
+            }
+        }
+
+        // GET JWT token from localStorage
+        function getToken() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('❌ No token found! Please login first.');
+                window.location.href = '/auth/login';
+            }
+            return token;
+        }
+
+        // Display token
+        function viewToken() {
+            const token = getToken();
+            alert('Your JWT Token:\n\n' + token);
+        }
+
+        // Test protected route
+        async function fetchProtectedRoute() {
+            const token = getToken();
+            const loader = document.getElementById('loading');
+            loader.classList.add('show');
+
+            try {
+                const response = await fetch('/api/protected', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('✅ Protected Route Successful!\n\n' + JSON.stringify(data, null, 2));
+                } else {
+                    alert('❌ ' + data.error);
+                }
+            } catch (error) {
+                alert('❌ Error: ' + error.message);
+            } finally {
+                loader.classList.remove('show');
+            }
+        }
+
+        // Logout function
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('token');
+                window.location.href = '/';
+            }
+        }
+
+        // Navigate to home
+        function goToHome() {
+            window.location.href = '/';
+        }
+
+        // Enter key to send message
+        document.getElementById('messageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
