@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": "ORD-1779666235104",
+    "createdAt": "2026-05-24T23:43:55.104Z",
+    "status": "confirmed",
+    "paymentMethod": "card",
+    "shipping": {
+      "fullName": "arsh",
+      "email": "test@gmail.com",
+      "phone": "88728376",
+      "addressLine1": "837/4, circular road",
+      "city": "Ambala",
+      "state": "Ambala city",
+      "pin": "134003"
+    },
+    "items": [
+      {
+        "id": "auc-jordan1",
+        "name": "Air Jordan 1 Chicago",
+        "price": 18500,
+        "quantity": 1
+      }
+    ],
+    "total": 18500
+  }
+]

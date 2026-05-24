@@ -138,7 +138,8 @@ app.set('view engine', 'ejs');
 
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.static(path.join(__dirname,'public')));
+const publicDir = path.join(__dirname,'public');
+app.use(express.static(publicDir));
 
 
 // ================= ROUTES =================
@@ -155,7 +156,7 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.get('/', (req, res) => {
 
   res.sendFile(
-    path.join(__dirname,'public', 'index.html')
+    path.join(publicDir, 'index.html')
   );
 
 });

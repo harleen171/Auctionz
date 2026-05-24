@@ -44,9 +44,9 @@ function writeCart(cart) {
 }
 
 const demoItems = [
-  { id: 1, name: "Apple iPhone 16 PRO MAX", price: 144900 },
-  { id: 2, name: "Dell Alienware x16", price: 442990 },
-  { id: 3, name: "Samsung Galaxy Buds 2", price: 13990 },
+  { id: 1, name: "Air Jordan 1 Chicago", price: 18500 },
+  { id: 2, name: "Luxury Handbag", price: 22000 },
+  { id: 3, name: "Rolex Submariner", price: 125000 },
 ];
 
 router.get("/items", (req, res) => {
@@ -212,12 +212,37 @@ router.post("/checkout", (req, res) => {
     res.json({
       success: true,
       orderId: order.id,
+      order,
       total,
       message: "Order placed successfully (demo — no real payment)",
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, error: "Checkout failed" });
+  }
+});
+
+router.get("/orders", (req, res) => {
+  try {
+    const email = String(req.query.email || "")
+      .trim()
+      .toLowerCase();
+    const rawOrders = readJsonFile(ordersPath, []);
+    const orderList = Array.isArray(rawOrders) ? rawOrders : [];
+    if (!email) {
+      return res.json({ orders: [] });
+    }
+    const orders = orderList
+      .filter(
+        (o) =>
+          o.shipping &&
+          String(o.shipping.email || "").trim().toLowerCase() === email
+      )
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    res.json({ orders });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ orders: [], error: "Could not load orders" });
   }
 });
 
