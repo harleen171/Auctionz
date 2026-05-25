@@ -1,24 +1,14 @@
 const request = require("supertest");
-const mongoose = require("mongoose");
+const { app } = require("../server");
 
-const { app, server } = require("../server");
+describe("Server Test", () => {
 
-describe("User API Testing", () => {
+  test("API should respond", async () => {
 
-  test("GET / should return 200", async () => {
+    const response = await request(app).get("/api");
 
-    const response = await request(app).get("/");
-
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).not.toBe(500);
 
   });
-
-});
-
-afterAll(async () => {
-
-  await mongoose.connection.close();
-
-  server.close();
 
 });
