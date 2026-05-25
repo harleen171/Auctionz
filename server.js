@@ -148,7 +148,7 @@ app.use(express.static(publicDir));
 app.use('/api', apiRoutes);
 
 // PRISMA USER ROUTES
-app.use('/api/users', require('./routes/userRoutes'));
+//app.use('/api/users', require('./routes/userRoutes'));
 
 
 // ================= PAGE ROUTES =================
